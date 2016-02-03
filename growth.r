@@ -1,13 +1,11 @@
 library("XML")       #readHTMLTable
-library("extrafont")
-library("zoo")       
-library("htmlTable")
-library("reshape2")
-library("ggplot2")
-library("xkcd")
-library("cowplot")   #ggdraw
+library("extrafont") #loadfonts
+library("zoo")       #as.yearmon
+library("reshape2")  #melt
+library("ggplot2")   #ggplot
+library("xkcd")      #theme_xkcd
 
-setwd("/projects_small/gdal-ogr-format-driver-growth/")
+setwd("D:/Projekte/gdal-ogr-format-driver-growth/")
 
 #force english month abbreviations (font doesn't have any special charachters)
 if(.Platform$OS.type != "unix") {
@@ -21,7 +19,6 @@ download.file("http://simonsoftware.se/other/xkcd.ttf",
               dest="xkcd.ttf", mode="wb")
 font_import(".", prompt=FALSE)
 if(.Platform$OS.type != "unix") {
-  ## Register fonts for Windows bitmap output
   loadfonts(device="win")
 } else {
   loadfonts()
@@ -113,7 +110,7 @@ GeoJSON 1.5.0 12-2007 ogr 44
 MongoDB 2.1.0 05-2016 ogr 65")
 
 highs$date <- as.Date(as.yearmon(highs$date, "%m-%Y"))
-p <- p + geom_label(data=highs, aes(date, hight, group=variable, label=driver), fill="yellow", fontface = "bold", size=7, family = "xkcd", label.size = 0, show.legend = F)
+p <- p + geom_label(data=highs, aes(date, hight, group=variable, label=driver), fill="yellow", fontface = "bold", size=7, family = "xkcd", label.size = NA, show.legend = F)
 
 #png("time-series.png", width=800, height=457)
 p
