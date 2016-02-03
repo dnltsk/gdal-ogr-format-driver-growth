@@ -7,9 +7,14 @@ library("ggplot2")
 library("xkcd")
 library("cowplot")   #ggdraw
 
-LC_ALL="en_EN.utf8 date"
-
 setwd("/projects_small/gdal-ogr-format-driver-growth/")
+
+#force english month abbreviations (font doesn't have any special charachters)
+if(.Platform$OS.type != "unix") {
+  Sys.setlocale("LC_TIME", "C")
+} else {
+  Sys.setlocale("LC_TIME", "English")
+}
 
 # XKCD Font
 download.file("http://simonsoftware.se/other/xkcd.ttf",
@@ -21,26 +26,6 @@ if(.Platform$OS.type != "unix") {
 } else {
   loadfonts()
 }
-
-xkcd_line <- function(x, y, color) {
-  len <- length(x);
-  rg <- par("usr");
-  yjitter <- (rg[4] - rg[3]) / 1000;
-  xjitter <- (rg[2] - rg[1]) / 1000;
-  x_mod <- x + rnorm(len) * xjitter;
-  y_mod <- y + rnorm(len) * yjitter;
-  lines(x_mod, y_mod, col='white', lwd=10);
-  lines(x_mod, y_mod, col=color, lwd=5);
-}
-
-xkcd_axis <- function() {
-  rg <- par("usr");
-  yaxis <- 1:100 / 100 * (rg[4] - rg[3]) + rg[3];
-  xaxis <- 1:100 / 100 * (rg[2] - rg[1]) + rg[1];
-  xkcd_line(1:100 * 0 + rg[1] + (rg[2]-rg[1])/100, yaxis,'black')
-  xkcd_line(xaxis, 1:100 * 0 + rg[3] + (rg[4]-rg[3])/100, 'black')
-}
-
 
 data <- read.table(header = TRUE, text = "
 version date
@@ -92,6 +77,7 @@ x_date_labels <- function(currentDate) {
 p <- ggplot(melted, aes(date, value, color = variable)) +
   ggtitle("GDAL-OGR: continues growth of format drivers") +
   geom_line(aes(group=variable)) +
+  geom_label(aes(fill= variable, label=value), colour = "white", fontface = "bold", family = "xkcd", size=5, label.size = 1, show.legend=F) +
   theme_xkcd() +
   #axes
   theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1)) +
@@ -100,10 +86,7 @@ p <- ggplot(melted, aes(date, value, color = variable)) +
                #labels=paste(data$version, "-", format(data$date, "%b %Y")),
                labels=x_date_labels,
                limits=c(min(data$date)-150, max(data$date)+200)) +
-  #scale_y_continuous(name="num of formats", breaks=seq(0,150,25)) +
   scale_y_continuous(name=NULL,breaks=NULL) +
-  #label
-  geom_label(aes(fill= variable, label=value), colour = "white", fontface = "bold", family = "xkcd", size=5, label.size = 1, show.legend=F) +
   #legend
   theme(legend.justification=c(0,1), 
         legend.position=c(0,1), 
@@ -127,19 +110,11 @@ CartoDB 1.11.0 04-2014 ogr 91
 WFS 1.8.0 01-2011 ogr 66
 ElasticSearch 1.10.0 10-2013 ogr 55
 GeoJSON 1.5.0 12-2007 ogr 44
-MongoDB 2.1.0 05-2016 ogr 65
-")
+MongoDB 2.1.0 05-2016 ogr 65")
 
 highs$date <- as.Date(as.yearmon(highs$date, "%m-%Y"))
 p <- p + geom_label(data=highs, aes(date, hight, group=variable, label=driver), fill="yellow", fontface = "bold", size=7, family = "xkcd", label.size = 0, show.legend = F)
 
-#p <- p + geom_label(data=highs, aes(date, hight, group=variable, label=driver), fill="yellow", fontface = "bold", size=7, family = "xkcd", label.size = 0, show.legend = F)
-
-png("time-series.png", width=700, height=400)
+#png("time-series.png", width=800, height=457)
 p
-dev.off()
-
-
-#ggdraw(switch_axis_position(p, axis = 'y'))
-
-#ggsave("plot.png", width=14, height=8, dpi=96, units="in")
+#dev.off()
