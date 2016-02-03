@@ -112,6 +112,6 @@ MongoDB 2.1.0 05-2016 ogr 65")
 highs$date <- as.Date(as.yearmon(highs$date, "%m-%Y"))
 p <- p + geom_label(data=highs, aes(date, hight, group=variable, label=driver), fill="yellow", fontface = "bold", size=7, family = "xkcd", label.size = NA, show.legend = F)
 
-#png("time-series.png", width=800, height=457)
 p
-#dev.off()
+ggsave("time-series.png", width=7, height=4, units="cm", dpi=300, scale=3)
+
