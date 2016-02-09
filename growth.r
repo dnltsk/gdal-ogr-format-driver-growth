@@ -98,7 +98,7 @@ p <- ggplot(melted, aes(date, value, color = variable)) +
 highs <- read.table(header = TRUE, text = "
 driver version date variable hight
 WMS 1.5.0 10-2007 gdal 90
-BigTIFF 1.5.0 05-2007 gdal 110
+BigTIFF 1.5.0 06-2007 gdal 107
 Grib 1.6.0 12-2008 gdal 110
 R 1.7.1 02-2010 gdal 120
 Rasterlite 1.7.1 08-2010 gdal 90
