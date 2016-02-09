@@ -4,15 +4,12 @@ library("zoo")       #as.yearmon
 library("reshape2")  #melt
 library("ggplot2")   #ggplot
 library("xkcd")      #theme_xkcd
+library("grid")      #grid.draw
 
-setwd("D:/Projekte/gdal-ogr-format-driver-growth/")
+setwd("/projects_small/gdal-ogr-format-driver-growth/")
 
 #force english month abbreviations (font doesn't have any special charachters)
-if(.Platform$OS.type != "unix") {
-  Sys.setlocale("LC_TIME", "C")
-} else {
-  Sys.setlocale("LC_TIME", "English")
-}
+Sys.setlocale("LC_TIME", "C")
 
 # XKCD Font
 download.file("http://simonsoftware.se/other/xkcd.ttf",
@@ -72,24 +69,28 @@ x_date_labels <- function(currentDate) {
 }
 
 p <- ggplot(melted, aes(date, value, color = variable)) +
-  ggtitle("GDAL-OGR: continues growth of format drivers") +
+  theme_xkcd() +
+  #data
   geom_line(aes(group=variable)) +
   geom_label(aes(fill= variable, label=value), colour = "white", fontface = "bold", family = "xkcd", size=5, label.size = 1, show.legend=F) +
-  theme_xkcd() +
+  #title
+  labs(title="GDAL-OGR: continues growth of format drivers\n") +
+  theme(plot.title = element_text(size=30, face="bold")) +
   #axes
   theme(axis.text.x = element_text(angle = 45, hjust=1, vjust=1)) +
   scale_x_date(name=NULL,
-               breaks=data$date, 
-               #labels=paste(data$version, "-", format(data$date, "%b %Y")),
+               breaks=data$date,
                labels=x_date_labels,
                limits=c(min(data$date)-150, max(data$date)+200)) +
-  scale_y_continuous(name=NULL,breaks=NULL) +
+  scale_y_continuous(name=NULL, breaks=NULL, expand=c(0, 0)) +
+  theme(panel.grid=element_blank(), 
+        panel.border=element_blank(),
+        axis.ticks.length=unit(.2, "cm"),
+        plot.margin=unit(c(1,.5,1,.5),"cm")) +
   #legend
-  theme(legend.justification=c(0,1), 
+  theme(legend.justification=c(0,.75), 
         legend.position=c(0,1), 
-        legend.title=element_blank(),
-        plot.title = element_text(size=30, face="bold")) +
-  
+        legend.title=element_blank()) +
   scale_colour_discrete(breaks=c("gdal", "ogr"),
                         labels=c("\nnumber of\nraster formats\n", "number of\nvector formats"))
 
@@ -112,6 +113,21 @@ MongoDB 2.1.0 05-2016 ogr 65")
 highs$date <- as.Date(as.yearmon(highs$date, "%m-%Y"))
 p <- p + geom_label(data=highs, aes(date, hight, group=variable, label=driver), fill="yellow", fontface = "bold", size=7, family = "xkcd", label.size = NA, show.legend = F)
 
-p
-ggsave("time-series.png", width=7, height=4, units="cm", dpi=300, scale=3)
+# time axis arrow
+p <- p + geom_segment(aes(x=as.Date("2003-12-01"), 
+                                   y=0, 
+                                   xend=as.Date("2016-10-01"), 
+                                   yend=0),
+                      arrow=arrow(length=unit(0.3,"cm")),
+                      size=.5,
+                      show.legend=F,
+                      col="black")
+
+# hack to move the arrow out of the panel
+gt <- ggplot_gtable(ggplot_build(p))
+gt$layout$clip[gt$layout$name=="panel"] <- "off"
+
+grid.draw(gt)
+
+ggsave("time-series.png", plot=gt, width=7, height=5, units="cm", dpi=300, scale=3)
 
