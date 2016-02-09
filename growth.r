@@ -97,18 +97,18 @@ p <- ggplot(melted, aes(date, value, color = variable)) +
 
 highs <- read.table(header = TRUE, text = "
 driver version date variable hight
-WMS 1.5.0 12-2007 gdal 90
+WMS 1.5.0 10-2007 gdal 90
 BigTIFF 1.5.0 05-2007 gdal 110
 Grib 1.6.0 12-2008 gdal 110
 R 1.7.1 02-2010 gdal 120
 Rasterlite 1.7.1 08-2010 gdal 90
-WMTS 2.1.0 05-2016 gdal 130
+WMTS 2.1.0 05-2016 gdal 131
 SpatiaLite 1.7.1 07-2010 ogr 25
-CartoDB 1.11.0 04-2014 ogr 91
-WFS 1.8.0 01-2011 ogr 66
+CartoDB 1.11.0 02-2014 ogr 91
+WFS 1.8.0 12-2010 ogr 66
 ElasticSearch 1.10.0 10-2013 ogr 55
-GeoJSON 1.5.0 12-2007 ogr 44
-MongoDB 2.1.0 05-2016 ogr 65")
+GeoJSON 1.5.0 12-2007 ogr 45
+MongoDB 2.1.0 05-2016 ogr 68")
 
 highs$date <- as.Date(as.yearmon(highs$date, "%m-%Y"))
 p <- p + geom_label(data=highs, aes(date, hight, group=variable, label=driver), fill="yellow", fontface = "bold", size=7, family = "xkcd", label.size = NA, show.legend = F)
@@ -116,7 +116,7 @@ p <- p + geom_label(data=highs, aes(date, hight, group=variable, label=driver), 
 # time axis arrow
 p <- p + geom_segment(aes(x=as.Date("2003-12-01"), 
                                    y=0, 
-                                   xend=as.Date("2016-10-01"), 
+                                   xend=as.Date("2016-11-01"), 
                                    yend=0),
                       arrow=arrow(length=unit(0.3,"cm")),
                       size=.5,
