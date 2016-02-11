@@ -12,3 +12,4 @@ r_packages:
  - ggplot2
  - xkcd
  - grid
+ - devtools
