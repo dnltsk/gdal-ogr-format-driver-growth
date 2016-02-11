@@ -1,2 +1,5 @@
 xkcd.ttf
 .Rhistory
+.RData
+.idea/
+*.iml
