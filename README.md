@@ -13,7 +13,7 @@ One of the features which makes GDAL/OGR so powerful is the enormous amount of s
 - Web Map Tile Service (WMTS)
 - MongoDB
 
-**After all, the hard working developers are introducing 8.2 new raster formats and 5.4 new vector formats per version.** While one version per year is getting released - which is a clear statement!!!
+**After all, the hard working developers are introducing 8.2 new raster formats and 5.4 new vector formats per version.** While nearly one version per year is getting released - which is a clear statement!!!
 
 ### Sources
 
