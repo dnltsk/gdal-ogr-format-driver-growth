@@ -1,1 +1,12 @@
 language: R
+
+sudo: required
+
+r_packages: 
+ - XML
+ - extrafont
+ - zoo
+ - reshape2
+ - ggplot2
+ - xkcd
+ - grid
