@@ -123,6 +123,17 @@ p <- p + geom_segment(aes(x=as.Date("2003-12-01"),
                       show.legend=F,
                       col="black")
 
+# "plot created" tag
+createdText <- paste("plot created", format(Sys.Date(), format="%Y-%m-%d"))
+p <- p + annotation_custom(textGrob(createdText, 
+                                    gp=gpar(fontsize=10, fontfamily="xkcd"),
+                                    hjust=0),
+                           xmin=as.numeric(as.Date(min(data$date))),
+                           xmax=as.numeric(as.Date(min(data$date))),
+                           ymin=-100,
+                           ymax=0)
+
+
 # hack to move the arrow out of the panel
 gt <- ggplot_gtable(ggplot_build(p))
 gt$layout$clip[gt$layout$name=="panel"] <- "off"
