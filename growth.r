@@ -142,3 +142,23 @@ grid.draw(gt)
 
 ggsave("time-series.png", plot=gt, width=7, height=5, units="cm", dpi=300, scale=3)
 
+
+#
+# some simple statistics
+#
+numberVersion <- NROW(data)
+numberVersionYears <- length(seq(min(data$date), max(data$date), "years"))
+
+versionsPerYear <- round(numberVersion / numberVersionYears, 1)
+paste(versionsPerYear, "versions per year")
+
+gdalFormatsPerYear <- round((max(data$gdal) - min(data$gdal)) / numberVersionYears, 1)
+ogrFormatsPerYear <- round((max(data$ogr) - min(data$ogr)) / numberVersionYears, 1)
+paste(gdalFormatsPerYear, "format drivers per year")
+paste(ogrFormatsPerYear, "format drivers per year")
+
+gdalFormatsPerVersion <- round((max(data$gdal) - min(data$gdal)) / numberVersion, 1)
+ogrFormatsPerVersion <- round((max(data$ogr) - min(data$ogr)) / numberVersion, 1)
+paste(gdalFormatsPerVersion, "format drivers per version")
+paste(ogrFormatsPerVersion, "format drivers per version")
+
