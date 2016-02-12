@@ -27,5 +27,5 @@ One of the features which makes GDAL/OGR so powerful is the enormous amount of s
 
 * Version 1.1.0 doesn't contain this format lists so version 1.2.0 is the first one
 * Version 1.7.0 was retracted because of a critical bug so version 1.7.1 was used
-* Some formats are read only.
-* XKCD font doesn't support brackets or colons ;)
+* Some formats are read only
+* XKCD font doesn't support brackets, colons, slashes, tildes and so on ;~)
